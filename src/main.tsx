@@ -13,5 +13,3 @@ createRoot(rootElement).render(
     <App />
   </StrictMode>,
 );
-
-const variavelNaoUsada = 42;
