@@ -1,0 +1,2 @@
+# Quebra de linha LF em todo o repositorio (o Prettier exige LF; evita CRLF no Windows)
+* text=auto eol=lf

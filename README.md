@@ -2,7 +2,8 @@
 
 Painel web do TourVR, usado pela equipe para entrar no sistema e gerenciar o conteúdo.
 
-**Stack:** React 19 · Vite 6 · TypeScript · Tailwind CSS 4 · React Router 7 · Axios.
+**Stack:** React 19 · Vite 6 · TypeScript (strict) · Tailwind CSS 4 · React Router 7 · Axios ·
+ESLint · Prettier · Vitest.
 
 ## Como rodar
 
@@ -28,8 +29,12 @@ npm run dev             # http://localhost:3000
 
 ## Como testar
 
+Antes de cada commit, dentro desta pasta:
+
 ```bash
-npm run lint    # checagem de tipos (tsc --noEmit)
+npm run lint            # ESLint (regras de tipo) + tsc --noEmit em modo strict
+npm run format:check    # confere a formatação do Prettier (npm run format corrige)
+npm run test:coverage   # testes com Vitest; falha se a cobertura ficar abaixo de 80%
 ```
 
 ## Documentação
