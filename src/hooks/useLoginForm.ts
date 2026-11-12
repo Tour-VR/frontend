@@ -19,11 +19,12 @@ export function useLoginForm() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { signIn } = useAuth();
+  const { signIn, clearSessionNotice } = useAuth();
   const navigate = useNavigate();
 
   async function submit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
+    clearSessionNotice();
     setError('');
     setIsLoading(true);
 

@@ -12,7 +12,6 @@ vi.mock('../services/api', () => ({
   getStoredToken: vi.fn(),
   setAuthToken: vi.fn(),
   clearAuthToken: vi.fn(),
-  API_DOCS_URL: 'http://api.test/docs',
 }));
 
 vi.mock('../contexts/AuthContext', () => ({ useAuth: vi.fn() }));
@@ -97,14 +96,39 @@ describe('Login', () => {
     expect(screen.getByText('Carregando...')).toBeInTheDocument();
   });
 
-  it('mostra o aviso de primeiro acesso com link para /docs', () => {
+  it('nao fala mais em /docs e orienta a procurar um administrador', () => {
     vi.mocked(useAuth).mockReturnValue(buildAuthValue());
 
     renderLogin();
 
-    expect(screen.getByRole('link', { name: '/docs - POST /auth/register' })).toHaveAttribute(
-      'href',
-      'http://api.test/docs',
+    expect(screen.getByText('TourVR')).toBeInTheDocument();
+    expect(
+      screen.getByText('Não tem acesso? Fale com um administrador do TourVR.'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/\/docs/)).not.toBeInTheDocument();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('exibe o sessionNotice e o limpa ao enviar o formulario', async () => {
+    const clearSessionNotice = vi.fn();
+    vi.mocked(useAuth).mockReturnValue(
+      buildAuthValue({ sessionNotice: 'Sua sessão expirou. Entre novamente.', clearSessionNotice }),
     );
+    postMock.mockResolvedValue({ data: { access_token: 'jwt-123', token_type: 'bearer' } });
+    renderLogin();
+
+    expect(screen.getByRole('status')).toHaveTextContent('Sua sessão expirou. Entre novamente.');
+
+    await fillAndSubmit();
+
+    expect(clearSessionNotice).toHaveBeenCalled();
+  });
+
+  it('sem sessionNotice nao mostra a caixa de aviso', () => {
+    vi.mocked(useAuth).mockReturnValue(buildAuthValue());
+
+    renderLogin();
+
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
 });

@@ -11,6 +11,7 @@ export function buildUser(overrides: Partial<User> = {}): User {
     username: 'ana',
     role: 'admin',
     is_active: true,
+    is_verified: false,
     created_at: null,
     updated_at: null,
     ...overrides,
@@ -22,7 +23,10 @@ export function buildAuthValue(overrides: Partial<AuthValue> = {}): AuthValue {
   return {
     user: null,
     isAuthenticated: false,
+    isAdmin: false,
     loading: false,
+    sessionNotice: null,
+    clearSessionNotice: vi.fn(),
     signIn: vi.fn(),
     signOut: vi.fn(),
     ...overrides,

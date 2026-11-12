@@ -1,11 +1,21 @@
 import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
-import { api, clearAuthToken, getStoredToken, setAuthToken } from '../services/api';
+import { SESSION_EXPIRED_MESSAGE } from '../constants/messages';
+import {
+  api,
+  clearAuthToken,
+  getStoredToken,
+  setAuthToken,
+  setUnauthorizedHandler,
+} from '../services/api';
 import type { User } from '../types';
 
 interface AuthContextValue {
   user: User | null;
   isAuthenticated: boolean;
+  isAdmin: boolean;
   loading: boolean;
+  sessionNotice: string | null;
+  clearSessionNotice: () => void;
   signIn: (token: string) => Promise<User>;
   signOut: () => void;
 }
@@ -15,6 +25,28 @@ interface AuthProviderProps {
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+
+/** Registra o handler de 401 da API e guarda o aviso de sessao expirada. */
+function useSessionExpiry(setUser: (user: User | null) => void) {
+  const [sessionNotice, setSessionNotice] = useState<string | null>(null);
+
+  // O cleanup e obrigatorio: o StrictMode monta os efeitos duas vezes em desenvolvimento.
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      setUser(null);
+      setSessionNotice(SESSION_EXPIRED_MESSAGE);
+    });
+    return () => {
+      setUnauthorizedHandler(null);
+    };
+  }, [setUser]);
+
+  function clearSessionNotice() {
+    setSessionNotice(null);
+  }
+
+  return { sessionNotice, clearSessionNotice };
+}
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
@@ -33,6 +65,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       throw error;
     }
   }
+
+  // Chamado antes da restauracao de sessao: um 401 em GET /users/me na recarga ja encontra o handler.
+  const { sessionNotice, clearSessionNotice } = useSessionExpiry(setUser);
 
   useEffect(() => {
     async function restoreSession() {
@@ -64,11 +99,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(null);
   }
 
-  return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, loading, signIn, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value: AuthContextValue = {
+    user,
+    isAuthenticated: !!user,
+    isAdmin: user?.role === 'admin',
+    loading,
+    sessionNotice,
+    clearSessionNotice,
+    signIn,
+    signOut,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

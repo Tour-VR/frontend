@@ -3,7 +3,6 @@ import axios from 'axios';
 const TOKEN_STORAGE_KEY = '@OculosVR:token';
 
 export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-export const API_DOCS_URL = `${API_BASE_URL.replace(/\/$/, '')}/docs`;
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -32,3 +31,28 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
+
+type UnauthorizedHandler = () => void;
+let unauthorizedHandler: UnauthorizedHandler | null = null;
+
+/** Registra quem deve ser avisado quando a API responder 401 (sessao expirada ou invalida). */
+export function setUnauthorizedHandler(handler: UnauthorizedHandler | null) {
+  unauthorizedHandler = handler;
+}
+
+const LOGIN_PATH = '/auth/login';
+const HTTP_UNAUTHORIZED = 401;
+
+/** Trata o 401: limpa o token e avisa o handler, exceto no proprio login (credencial errada). */
+function handleResponseError(error: unknown): Promise<never> {
+  if (axios.isAxiosError(error)) {
+    const isLogin = error.config?.url === LOGIN_PATH;
+    if (error.response?.status === HTTP_UNAUTHORIZED && !isLogin) {
+      clearAuthToken();
+      unauthorizedHandler?.();
+    }
+  }
+  return Promise.reject(error instanceof Error ? error : new Error(String(error)));
+}
+
+api.interceptors.response.use((response) => response, handleResponseError);
