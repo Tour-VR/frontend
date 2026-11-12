@@ -22,7 +22,10 @@ export function buildAuthValue(overrides: Partial<AuthValue> = {}): AuthValue {
   return {
     user: null,
     isAuthenticated: false,
+    isAdmin: false,
     loading: false,
+    sessionNotice: null,
+    clearSessionNotice: vi.fn(),
     signIn: vi.fn(),
     signOut: vi.fn(),
     ...overrides,

@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { buildAuthValue, buildUser } from '../test/factories';
@@ -37,13 +38,34 @@ describe('ProtectedRoute', () => {
     expect(screen.getByText('Pagina de login')).toBeInTheDocument();
   });
 
-  it('renderiza a rota filha com sessao', () => {
+  it('renderiza a rota filha para administrador', () => {
     vi.mocked(useAuth).mockReturnValue(
-      buildAuthValue({ user: buildUser(), isAuthenticated: true }),
+      buildAuthValue({ user: buildUser(), isAuthenticated: true, isAdmin: true }),
     );
 
     renderAt('/dashboard');
 
     expect(screen.getByText('Conteudo protegido')).toBeInTheDocument();
+  });
+
+  it('mostra acesso restrito para quem nao e administrador', async () => {
+    const signOut = vi.fn();
+    vi.mocked(useAuth).mockReturnValue(
+      buildAuthValue({
+        user: buildUser({ role: 'user' }),
+        isAuthenticated: true,
+        isAdmin: false,
+        signOut,
+      }),
+    );
+
+    renderAt('/dashboard');
+
+    expect(screen.getByText('Acesso restrito a administradores.')).toBeInTheDocument();
+    expect(screen.queryByText('Conteudo protegido')).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Sair' }));
+
+    expect(signOut).toHaveBeenCalled();
   });
 });
