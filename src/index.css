@@ -1,1 +1,109 @@
 @import 'tailwindcss';
+
+/* Tokens de sombra e movimento do painel (plano 022). Geram classes como
+   shadow-popover, ease-out-expo e animate-scale-in. */
+@theme {
+  --shadow-popover: 0 0 0 1px #00000008, 0 15px 35px 0 #0000001a, 0 5px 15px 0 #00000014;
+  --shadow-dialog: 0 10px 40px #0000001f, 0 0 16px #00000014;
+  --shadow-tooltip: 0 0 0 1px #00000017, 0 2px 5px #0000000a;
+  --shadow-button: 0 1px 1px #0000000a;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-scale-in: scale-in 120ms var(--ease-out-expo);
+  --animate-scale-out: scale-out 120ms var(--ease-out-expo);
+  --animate-fade-in: fade-in 200ms ease-out;
+  --animate-fade-out: fade-out 200ms ease-in;
+  --animate-drawer-in: drawer-in 200ms var(--ease-out-expo);
+  --animate-drawer-out: drawer-out 200ms ease-in;
+  --animate-pulse-ring: pulse-ring 1.8s ease-in-out 0.5s infinite both;
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.94);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes scale-out {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.94);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes drawer-in {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes drawer-out {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes pulse-ring {
+    from {
+      opacity: 0.5;
+      transform: scale(0.1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(2.5);
+    }
+  }
+}
+
+/* Camadas de sobreposicao: use z-(--z-drawer) etc., nunca z-index numerico solto. */
+:root {
+  --z-popup: 10;
+  --z-drawer-scrim: 20;
+  --z-drawer: 30;
+  --z-floating: 50;
+  --z-toast: 60;
+}
+
+/* Quem pede menos movimento no sistema nao ve animacoes. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
