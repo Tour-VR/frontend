@@ -1,4 +1,5 @@
 import { MetricsPendingCard } from '../components/dashboard/MetricsPendingCard';
+import { PageHeader } from '../components/ui/PageHeader';
 import { useAuth } from '../contexts/AuthContext';
 
 export function Dashboard() {
@@ -7,10 +8,7 @@ export function Dashboard() {
 
   return (
     <>
-      <header className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900">Visao Geral</h2>
-        <p className="mt-1 text-gray-500">Bem-vindo(a) de volta, {displayName}.</p>
-      </header>
+      <PageHeader title="Dashboard" description={`Bem-vindo(a) de volta, ${displayName}.`} />
 
       <MetricsPendingCard />
     </>

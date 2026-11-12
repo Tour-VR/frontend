@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { SidebarNav } from './SidebarNav';
 
@@ -38,5 +39,18 @@ describe('SidebarNav', () => {
     const item = screen.getByText('Pontos').closest('[aria-disabled]');
     expect(item).toHaveAttribute('aria-disabled', 'true');
     expect(item).toHaveTextContent('em breve');
+  });
+
+  it('chama onNavigate ao clicar num item habilitado', async () => {
+    const onNavigate = vi.fn();
+    render(
+      <MemoryRouter initialEntries={['/outra']}>
+        <SidebarNav onNavigate={onNavigate} />
+      </MemoryRouter>,
+    );
+
+    await userEvent.click(screen.getByRole('link', { name: 'Dashboard' }));
+
+    expect(onNavigate).toHaveBeenCalledOnce();
   });
 });

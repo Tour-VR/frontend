@@ -5,10 +5,12 @@ const ITEM_CLASS = 'flex items-center rounded-md px-3 py-2 font-medium';
 
 interface SidebarNavProps {
   items?: NavItem[];
+  /** Chamado ao clicar num item habilitado (a gaveta usa para se fechar). */
+  onNavigate?: () => void;
 }
 
 /** Menu lateral: item habilitado e link; item futuro fica cinza, sem link, com "em breve". */
-export function SidebarNav({ items = NAV_ITEMS }: SidebarNavProps) {
+export function SidebarNav({ items = NAV_ITEMS, onNavigate }: SidebarNavProps) {
   return (
     <nav className="flex-1 space-y-1 p-4">
       {items.map(({ label, to, icon: Icon, enabled }) =>
@@ -16,6 +18,7 @@ export function SidebarNav({ items = NAV_ITEMS }: SidebarNavProps) {
           <NavLink
             key={to}
             to={to}
+            onClick={onNavigate}
             className={({ isActive }) =>
               `${ITEM_CLASS} ${
                 isActive ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50'
