@@ -31,5 +31,8 @@ export default tseslint.config(
     },
   },
   { files: ['*.config.js', '*.config.ts'], ...tseslint.configs.disableTypeChecked },
+  // Scripts Node de apoio (ex.: gen:types): fora do tsconfig, rodam no Node e nao no navegador.
+  { files: ['scripts/**/*.mjs'], ...tseslint.configs.disableTypeChecked },
+  { files: ['scripts/**/*.mjs'], languageOptions: { globals: globals.node } },
   prettier,
 );

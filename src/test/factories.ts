@@ -11,6 +11,7 @@ export function buildUser(overrides: Partial<User> = {}): User {
     username: 'ana',
     role: 'admin',
     is_active: true,
+    is_verified: false,
     created_at: null,
     updated_at: null,
     ...overrides,

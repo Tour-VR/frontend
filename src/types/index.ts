@@ -1,19 +1,9 @@
-export interface User {
-  email: string;
-  full_name: string | null;
-  username: string | null;
-  role: string;
-  is_active: boolean;
-  created_at: string | null;
-  updated_at: string | null;
-}
+// Aliases legiveis dos tipos gerados do OpenAPI (`npm run gen:types`).
+// Nao escreva interface de contrato a mao: regenere `api.d.ts` quando o backend mudar.
+import type { components } from './api';
 
-export interface AuthResponse {
-  access_token: string;
-  token_type: string;
-}
+type Schemas = components['schemas'];
 
-export interface LoginPayload {
-  email: string;
-  password: string;
-}
+export type User = Schemas['UserMeResponse'];
+export type AuthResponse = Schemas['TokenResponse'];
+export type LoginPayload = Schemas['UserLogin'];
