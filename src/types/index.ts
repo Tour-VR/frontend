@@ -7,3 +7,7 @@ type Schemas = components['schemas'];
 export type User = Schemas['UserMeResponse'];
 export type AuthResponse = Schemas['TokenResponse'];
 export type LoginPayload = Schemas['UserLogin'];
+export type Point = Schemas['PointAdminResponse'];
+export type PointCreate = Schemas['PointCreate'];
+export type PointUpdate = Schemas['PointUpdate'];
+export type PointStatus = Point['status'];
