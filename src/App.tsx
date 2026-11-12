@@ -4,6 +4,8 @@ import { AuthProvider } from './contexts/AuthContext';
 import { AdminLayout } from './layouts/AdminLayout';
 import { Dashboard } from './pages/Dashboard';
 import { Login } from './pages/Login';
+import { PointForm } from './pages/points/PointForm';
+import { PointsList } from './pages/points/PointsList';
 
 export default function App() {
   return (
@@ -15,6 +17,9 @@ export default function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<AdminLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/pontos" element={<PointsList />} />
+              <Route path="/pontos/novo" element={<PointForm />} />
+              <Route path="/pontos/:pointId" element={<PointForm />} />
             </Route>
           </Route>
 

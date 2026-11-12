@@ -8,8 +8,8 @@ export interface NavItem {
   enabled: boolean;
 }
 
-// Os planos 012, 014 e 015 habilitam itens e acrescentam novos.
+// Os planos 014 e 015 acrescentam itens novos.
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard, enabled: true },
-  { label: 'Pontos', to: '/pontos', icon: MapPin, enabled: false },
+  { label: 'Pontos', to: '/pontos', icon: MapPin, enabled: true },
 ];
