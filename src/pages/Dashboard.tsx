@@ -1,5 +1,4 @@
-import { MetricCards } from '../components/dashboard/MetricCards';
-import { UserDataPanel } from '../components/dashboard/UserDataPanel';
+import { MetricsPendingCard } from '../components/dashboard/MetricsPendingCard';
 import { useAuth } from '../contexts/AuthContext';
 
 export function Dashboard() {
@@ -13,9 +12,7 @@ export function Dashboard() {
         <p className="mt-1 text-gray-500">Bem-vindo(a) de volta, {displayName}.</p>
       </header>
 
-      <MetricCards />
-
-      <UserDataPanel user={user} />
+      <MetricsPendingCard />
     </>
   );
 }

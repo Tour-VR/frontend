@@ -30,10 +30,16 @@ describe('Dashboard', () => {
     expect(screen.getByText(`Bem-vindo(a) de volta, ${expectedName}.`)).toBeInTheDocument();
   });
 
-  it('mostra metricas e os dados de /users/me', () => {
+  it('nao exibe numeros ficticios nem o JSON de /users/me', () => {
     renderDashboard(buildUser());
 
-    expect(screen.getByText('Usuarios Ativos')).toBeInTheDocument();
-    expect(screen.getByText(/"email": "ana@tourvr.test"/)).toBeInTheDocument();
+    expect(
+      screen.getByText('As métricas do tour aparecerão aqui quando o plano 015 for concluído.'),
+    ).toBeInTheDocument();
+    for (const fakeNumber of ['124', '12', '89']) {
+      expect(screen.queryByText(fakeNumber)).not.toBeInTheDocument();
+    }
+    expect(document.body).not.toHaveTextContent(/\b(124|12|89)\b/);
+    expect(screen.queryByText(/"email"/)).not.toBeInTheDocument();
   });
 });
