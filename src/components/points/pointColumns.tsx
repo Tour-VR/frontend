@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import type { Point } from '../../types';
 import type { DataTableColumn } from '../ui/DataTable';
 import { RowActions } from '../ui/RowActions';
+import { QrCodeLink } from './QrCodeLink';
 import { StatusBadge } from './StatusBadge';
 
 interface ColumnHandlers {
@@ -50,7 +51,13 @@ export function pointColumns(handlers: ColumnHandlers): DataTableColumn<Point>[]
       key: 'actions',
       header: <span className="sr-only">Ações</span>,
       render: (point) => (
-        <RowActions label={`Ações do ponto ${point.name}`} actions={actionsFor(point, handlers)} />
+        <div className="flex items-center justify-end gap-2">
+          {point.status === 'published' ? <QrCodeLink slug={point.slug} /> : null}
+          <RowActions
+            label={`Ações do ponto ${point.name}`}
+            actions={actionsFor(point, handlers)}
+          />
+        </div>
       ),
     },
   ];
