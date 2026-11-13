@@ -1,4 +1,5 @@
 import type { Point } from '../../types';
+import { QrCodeLink } from './QrCodeLink';
 
 interface PointFormActionsProps {
   point: Point | null;
@@ -44,6 +45,7 @@ export function PointFormActions({ point, submitting, busy, ...handlers }: Point
           >
             Excluir
           </button>
+          {point.status === 'published' ? <QrCodeLink slug={point.slug} /> : null}
         </>
       ) : null}
     </div>

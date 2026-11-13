@@ -128,6 +128,10 @@ describe('PointForm — edicao', () => {
     expect(screen.getByLabelText('Identificador')).toBeDisabled();
     expect(screen.getByText('Despublique para alterar o identificador.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Despublicar' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'QR Code' })).toHaveAttribute(
+      'href',
+      '/qrcodes?slug=biblioteca-central',
+    );
   });
 
   it('excluir pede confirmacao e volta para a lista', async () => {

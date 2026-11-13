@@ -31,6 +31,17 @@ describe('PointsList', () => {
     );
     expect(screen.getByText('Rascunho')).toBeInTheDocument();
     expect(screen.getByText('11/11/2026')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'QR Code' })).not.toBeInTheDocument();
+  });
+
+  it('ponto publicado tem atalho para o QR Code', async () => {
+    vi.mocked(listPoints).mockResolvedValue([buildPoint({ status: 'published' })]);
+    renderList();
+
+    expect(await screen.findByRole('link', { name: 'QR Code' })).toHaveAttribute(
+      'href',
+      '/qrcodes?slug=biblioteca-central',
+    );
   });
 
   it('mostra o estado vazio com o botao Novo ponto', async () => {
