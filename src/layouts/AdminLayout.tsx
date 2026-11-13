@@ -11,16 +11,18 @@ export function AdminLayout() {
   const isBelowMd = useMediaQuery(BELOW_MD_QUERY);
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 md:flex-row">
+    <div className="flex min-h-screen flex-col bg-gray-50 md:flex-row print:bg-white">
       {isBelowMd ? (
-        <MobileTopBar />
+        <div className="print:hidden">
+          <MobileTopBar />
+        </div>
       ) : (
-        <aside className="flex w-64 flex-col border-r border-gray-200 bg-white">
+        <aside className="flex w-64 flex-col border-r border-gray-200 bg-white print:hidden">
           <SidebarPanel />
         </aside>
       )}
 
-      <main className="flex-1 p-4 md:p-8">
+      <main className="flex-1 p-4 md:p-8 print:p-0">
         <Outlet />
       </main>
     </div>

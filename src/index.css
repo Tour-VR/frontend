@@ -107,3 +107,19 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Folha de QR Codes (plano 014): A4, 2 x 2 cartoes por pagina. */
+@page {
+  size: A4;
+  margin: 1.2cm;
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .qr-sheet article {
+    height: 12.5cm;
+  }
+}
