@@ -1,5 +1,5 @@
 import type { useAuth } from '../contexts/AuthContext';
-import type { User } from '../types';
+import type { Point, User } from '../types';
 
 type AuthValue = ReturnType<typeof useAuth>;
 
@@ -29,6 +29,23 @@ export function buildAuthValue(overrides: Partial<AuthValue> = {}): AuthValue {
     clearSessionNotice: vi.fn(),
     signIn: vi.fn(),
     signOut: vi.fn(),
+    ...overrides,
+  };
+}
+
+/** Ponto de interesse de exemplo para os testes. */
+export function buildPoint(overrides: Partial<Point> = {}): Point {
+  return {
+    id: '665f1c2e9b1e8a0012345678',
+    slug: 'biblioteca-central',
+    name: 'Biblioteca Central',
+    summary: 'Onde ficam os livros.',
+    history: 'Historia da biblioteca.',
+    status: 'draft',
+    media: [],
+    created_at: '2026-11-10T12:00:00Z',
+    updated_at: '2026-11-11T12:00:00Z',
+    published_at: null,
     ...overrides,
   };
 }

@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MapPin } from 'lucide-react';
 import { MemoryRouter } from 'react-router-dom';
 import { SidebarNav } from './SidebarNav';
 
@@ -32,11 +33,21 @@ describe('SidebarNav', () => {
     expect(screen.getByRole('link', { name: 'Dashboard' })).not.toHaveClass('bg-indigo-50');
   });
 
-  it('item desabilitado nao e link, tem aria-disabled e "em breve"', () => {
+  it('item Pontos e um link para /pontos', () => {
     renderNav();
 
-    expect(screen.queryByRole('link', { name: /Pontos/ })).not.toBeInTheDocument();
-    const item = screen.getByText('Pontos').closest('[aria-disabled]');
+    expect(screen.getByRole('link', { name: 'Pontos' })).toHaveAttribute('href', '/pontos');
+  });
+
+  it('item desabilitado nao e link, tem aria-disabled e "em breve"', () => {
+    render(
+      <MemoryRouter>
+        <SidebarNav items={[{ label: 'Futuro', to: '/futuro', icon: MapPin, enabled: false }]} />
+      </MemoryRouter>,
+    );
+
+    expect(screen.queryByRole('link', { name: /Futuro/ })).not.toBeInTheDocument();
+    const item = screen.getByText('Futuro').closest('[aria-disabled]');
     expect(item).toHaveAttribute('aria-disabled', 'true');
     expect(item).toHaveTextContent('em breve');
   });
