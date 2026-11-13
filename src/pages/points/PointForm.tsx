@@ -5,6 +5,7 @@ import { PointEditor } from '../../components/points/PointEditor';
 import { StatusBadge } from '../../components/points/StatusBadge';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { usePoint } from '../../hooks/usePoint';
+import { MediaSection } from './media/MediaSection';
 
 const BACK_LINK = (
   <Link to="/pontos" className="text-sm font-medium text-indigo-700 hover:underline">
@@ -35,6 +36,7 @@ export function PointForm() {
         onSaved={setPoint}
         initialNotice={notice}
       />
+      {point ? <MediaSection key={point.id} point={point} onSaved={setPoint} /> : null}
     </>
   );
 }

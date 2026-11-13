@@ -11,3 +11,6 @@ export type Point = Schemas['PointAdminResponse'];
 export type PointCreate = Schemas['PointCreate'];
 export type PointUpdate = Schemas['PointUpdate'];
 export type PointStatus = Point['status'];
+export type MediaItem = Schemas['MediaItemResponse'];
+export type MediaItemInput = Schemas['MediaItemInput'];
+export type MediaUpload = Schemas['MediaUploadResponse'];
