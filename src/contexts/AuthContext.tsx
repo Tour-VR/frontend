@@ -18,6 +18,7 @@ interface AuthContextValue {
   clearSessionNotice: () => void;
   signIn: (token: string) => Promise<User>;
   signOut: () => void;
+  updateUser: (user: User) => void;
 }
 
 interface AuthProviderProps {
@@ -99,6 +100,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(null);
   }
 
+  // Reflete no menu e na saudacao a edicao feita na tela de perfil.
+  function updateUser(updated: User) {
+    setUser(updated);
+  }
+
   const value: AuthContextValue = {
     user,
     isAuthenticated: !!user,
@@ -108,6 +114,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     clearSessionNotice,
     signIn,
     signOut,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
