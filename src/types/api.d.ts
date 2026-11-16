@@ -261,6 +261,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Users
+         * @description Lista usuarios do mais recente para o mais antigo, paginado.
+         */
+        get: operations["list_users_admin_users_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/users/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update User
+         * @description Ativa, desativa ou muda o papel de um usuario.
+         */
+        patch: operations["update_user_admin_users__user_id__patch"];
+        trace?: never;
+    };
     "/": {
         parameters: {
             query?: never;
@@ -454,6 +494,36 @@ export interface components {
             /** Visits */
             visits: number;
         };
+        /**
+         * UserAdminResponse
+         * @description Usuario como aparece na gestao do painel (sem senha).
+         */
+        UserAdminResponse: {
+            /** Id */
+            id: string;
+            /**
+             * Email
+             * Format: email
+             */
+            email: string;
+            /** Username */
+            username: string | null;
+            /** Full Name */
+            full_name: string | null;
+            /** Role */
+            role: string;
+            /** Is Active */
+            is_active: boolean;
+            /** Created At */
+            created_at: string | null;
+        };
+        /** UserAdminUpdate */
+        UserAdminUpdate: {
+            /** Is Active */
+            is_active?: boolean | null;
+            /** Role */
+            role?: ("admin" | "user") | null;
+        };
         /** UserChangePassword */
         UserChangePassword: {
             /** Current Password */
@@ -474,6 +544,17 @@ export interface components {
             full_name?: string | null;
             /** Username */
             username?: string | null;
+        };
+        /** UserListResponse */
+        UserListResponse: {
+            /** Items */
+            items: components["schemas"]["UserAdminResponse"][];
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
         };
         /** UserLogin */
         UserLogin: {
@@ -1120,6 +1201,73 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MediaUploadResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_users_admin_users_get: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_user_admin_users__user_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UserAdminUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserAdminResponse"];
                 };
             };
             /** @description Validation Error */
