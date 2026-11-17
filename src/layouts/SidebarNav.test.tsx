@@ -45,6 +45,13 @@ describe('SidebarNav', () => {
     expect(screen.getByRole('link', { name: 'QR Codes' })).toHaveAttribute('href', '/qrcodes');
   });
 
+  it('itens Usuarios e Meu perfil levam as novas telas', () => {
+    renderNav();
+
+    expect(screen.getByRole('link', { name: 'Usuários' })).toHaveAttribute('href', '/usuarios');
+    expect(screen.getByRole('link', { name: 'Meu perfil' })).toHaveAttribute('href', '/perfil');
+  });
+
   it('item desabilitado nao e link, tem aria-disabled e "em breve"', () => {
     render(
       <MemoryRouter>

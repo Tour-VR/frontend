@@ -155,6 +155,21 @@ describe('AuthContext', () => {
     expect(screen.getByText('aviso: nenhum')).toBeInTheDocument();
   });
 
+  it('updateUser substitui o usuario da sessao', async () => {
+    apiMock.getStoredToken.mockReturnValue('token-salvo');
+    apiMock.get.mockResolvedValue({ data: buildUser() });
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+    await vi.waitFor(() => {
+      expect(result.current.user?.full_name).toBe('Ana Souza');
+    });
+
+    act(() => {
+      result.current.updateUser(buildUser({ full_name: 'Ana Maria' }));
+    });
+
+    expect(result.current.user?.full_name).toBe('Ana Maria');
+  });
+
   it('remove o handler de 401 ao desmontar', async () => {
     apiMock.getStoredToken.mockReturnValue(null);
     const { unmount } = renderProvider();

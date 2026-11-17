@@ -9,6 +9,7 @@ interface FormFieldProps {
   maxLength?: number;
   multiline?: boolean;
   disabled?: boolean;
+  type?: 'text' | 'email' | 'password';
 }
 
 const INPUT_CLASS =
@@ -17,7 +18,7 @@ const INPUT_CLASS =
 /** Campo com rotulo, dica, contador opcional (x/max) e mensagem de erro. */
 export function FormField({ label, value, onChange, error, hint, ...options }: FormFieldProps) {
   const id = useId();
-  const { maxLength, multiline = false, disabled = false } = options;
+  const { maxLength, multiline = false, disabled = false, type = 'text' } = options;
   const describedBy = `${id}-hint ${id}-error`;
   const props = {
     id,
@@ -36,7 +37,7 @@ export function FormField({ label, value, onChange, error, hint, ...options }: F
       <label htmlFor={id} className="mb-1 block text-sm font-medium text-gray-700">
         {label}
       </label>
-      {multiline ? <textarea rows={8} {...props} /> : <input type="text" {...props} />}
+      {multiline ? <textarea rows={8} {...props} /> : <input type={type} {...props} />}
       <div className="mt-1 flex justify-between gap-4 text-xs text-gray-500">
         <span id={`${id}-hint`}>{hint}</span>
         {maxLength ? <span>{`${String(value.length)}/${String(maxLength)}`}</span> : null}
