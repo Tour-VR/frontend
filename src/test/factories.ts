@@ -44,6 +44,7 @@ export function buildPoint(overrides: Partial<Point> = {}): Point {
     history: 'Historia da biblioteca.',
     status: 'draft',
     media: [],
+    connections: [],
     created_at: '2026-11-10T12:00:00Z',
     updated_at: '2026-11-11T12:00:00Z',
     published_at: null,

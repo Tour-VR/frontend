@@ -6,15 +6,22 @@ import {
   createPoint,
   deletePoint,
   getPoint,
+  listPoints,
   publishPoint,
   updatePoint,
 } from '../../services/points';
+import { uploadMedia } from '../../services/media';
 import { buildPoint } from '../../test/factories';
 import { PointForm } from './PointForm';
 
 vi.mock('../../services/points');
+vi.mock('../../services/media');
 
 const ID = '665f1c2e9b1e8a0012345678';
+
+beforeEach(() => {
+  vi.mocked(listPoints).mockResolvedValue([]);
+});
 
 function renderAt(path: string) {
   return render(
@@ -152,5 +159,43 @@ describe('PointForm — edicao', () => {
     renderAt(`/pontos/${ID}`);
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Não foi possível concluir');
+  });
+});
+
+describe('PointForm — modo VR', () => {
+  it('secao Modo VR envia conexoes e panorama no PUT', async () => {
+    const cantina = buildPoint({ id: 'c1', slug: 'cantina', name: 'Cantina' });
+    vi.mocked(getPoint).mockResolvedValue(buildPoint());
+    vi.mocked(listPoints).mockResolvedValue([buildPoint(), cantina]);
+    vi.mocked(uploadMedia).mockResolvedValue({
+      url: '/media/p.jpg',
+      content_type: 'image/jpeg',
+      size_bytes: 10,
+    });
+    vi.mocked(updatePoint).mockImplementation(() => Promise.resolve(buildPoint()));
+    renderAt(`/pontos/${ID}`);
+
+    expect(await screen.findByRole('heading', { name: 'Modo VR' })).toBeInTheDocument();
+    await userEvent.upload(
+      screen.getByLabelText('Enviar panorama'),
+      new File(['x'], 'p.jpg', { type: 'image/jpeg' }),
+    );
+    expect(updatePoint).toHaveBeenLastCalledWith(ID, {
+      media: [{ kind: 'panorama', url: '/media/p.jpg', caption: null, alt_text: 'Panorama 360°' }],
+    });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Adicionar conexão' }));
+    await screen.findByRole('option', { name: 'Cantina (Rascunho)' });
+    await userEvent.selectOptions(screen.getByLabelText('Destino'), 'cantina');
+    await userEvent.click(screen.getByRole('button', { name: 'Salvar conexões' }));
+    expect(updatePoint).toHaveBeenLastCalledWith(ID, {
+      connections: [{ target_slug: 'cantina', label: 'Cantina', yaw_degrees: 0 }],
+    });
+  });
+
+  it('criacao nao mostra a secao Modo VR', () => {
+    renderAt('/pontos/novo');
+
+    expect(screen.queryByRole('heading', { name: 'Modo VR' })).not.toBeInTheDocument();
   });
 });
