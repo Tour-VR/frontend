@@ -339,9 +339,9 @@ export interface components {
             /**
              * Kind
              * @default photo
-             * @constant
+             * @enum {string}
              */
-            kind: "photo";
+            kind: "photo" | "panorama";
             /** Url */
             url: string;
             /** Caption */
@@ -353,8 +353,11 @@ export interface components {
         MediaItemResponse: {
             /** Id */
             id: string;
-            /** Kind */
-            kind: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "photo" | "panorama";
             /** Url */
             url: string;
             /** Caption */
@@ -409,6 +412,8 @@ export interface components {
             status: "draft" | "published";
             /** Media */
             media: components["schemas"]["MediaItemResponse"][];
+            /** Connections */
+            connections: components["schemas"]["PointConnectionSchema"][];
             /**
              * Created At
              * Format: date-time
@@ -422,6 +427,18 @@ export interface components {
             /** Published At */
             published_at?: string | null;
         };
+        /**
+         * PointConnectionSchema
+         * @description Conexao para um ponto vizinho; o alvo e validado no service.
+         */
+        PointConnectionSchema: {
+            /** Target Slug */
+            target_slug: string;
+            /** Label */
+            label: string;
+            /** Yaw Degrees */
+            yaw_degrees: number;
+        };
         /** PointCreate */
         PointCreate: {
             /** Slug */
@@ -434,6 +451,22 @@ export interface components {
             history: string;
             /** Media */
             media?: components["schemas"]["MediaItemInput"][];
+            /** Connections */
+            connections?: components["schemas"]["PointConnectionSchema"][];
+        };
+        /**
+         * PointPublicConnection
+         * @description Conexao exibida ao visitante; so para alvos publicados.
+         */
+        PointPublicConnection: {
+            /** Target Slug */
+            target_slug: string;
+            /** Target Name */
+            target_name: string;
+            /** Label */
+            label: string;
+            /** Yaw Degrees */
+            yaw_degrees: number;
         };
         /** PointPublicDetail */
         PointPublicDetail: {
@@ -447,6 +480,10 @@ export interface components {
             history: string;
             /** Media */
             media: components["schemas"]["MediaItemResponse"][];
+            /** Panorama Url */
+            panorama_url: string | null;
+            /** Connections */
+            connections: components["schemas"]["PointPublicConnection"][];
         };
         /** PointPublicSummary */
         PointPublicSummary: {
@@ -458,6 +495,8 @@ export interface components {
             summary: string;
             /** Cover Url */
             cover_url?: string | null;
+            /** Has Panorama */
+            has_panorama: boolean;
         };
         /**
          * PointUpdate
@@ -474,6 +513,8 @@ export interface components {
             history?: string | null;
             /** Media */
             media?: components["schemas"]["MediaItemInput"][] | null;
+            /** Connections */
+            connections?: components["schemas"]["PointConnectionSchema"][] | null;
         };
         /**
          * TokenResponse

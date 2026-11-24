@@ -12,9 +12,10 @@ vi.mock('../services/media');
 
 const A: MediaItem = { id: 'a', kind: 'photo', url: '/media/a.jpg', caption: null, alt_text: 'A' };
 const B: MediaItem = { id: 'b', kind: 'photo', url: '/media/b.jpg', caption: 'B', alt_text: 'B' };
+const P: MediaItem = { id: 'p', kind: 'panorama', url: '/media/p.jpg', alt_text: 'Panorama' };
 const point = buildPoint({ media: [A, B] });
 
-function setup() {
+function setup(target = point) {
   const onSaved = vi.fn();
   vi.mocked(updatePoint).mockImplementation((_id, payload) =>
     Promise.resolve(
@@ -27,7 +28,7 @@ function setup() {
       }),
     ),
   );
-  const hook = renderHook(() => useMediaList(point, onSaved));
+  const hook = renderHook(() => useMediaList(target, onSaved));
   return { ...hook, onSaved };
 }
 
@@ -54,6 +55,15 @@ describe('useMediaList', () => {
     expect(result.current.items).toHaveLength(3);
     expect(onSaved).toHaveBeenCalledOnce();
     expect(result.current.uploading).toBe(false);
+  });
+
+  it('lista so as fotos e preserva o panorama ao gravar', async () => {
+    const { result } = setup(buildPoint({ media: [A, P, B] }));
+
+    expect(result.current.items.map((item) => item.id)).toEqual(['a', 'b']);
+    await act(() => result.current.remove(1));
+
+    expect(sentMedia()?.map((item) => item.id)).toEqual(['a', 'p']);
   });
 
   it('move a foto para baixo e para cima', async () => {

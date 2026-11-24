@@ -13,6 +13,7 @@ export type PointUpdate = Schemas['PointUpdate'];
 export type PointStatus = Point['status'];
 export type MediaItem = Schemas['MediaItemResponse'];
 export type MediaItemInput = Schemas['MediaItemInput'];
+export type PointConnection = Schemas['PointConnectionSchema'];
 export type MediaUpload = Schemas['MediaUploadResponse'];
 export type MetricsOverview = Schemas['MetricsOverviewResponse'];
 export type AdminUser = Schemas['UserAdminResponse'];

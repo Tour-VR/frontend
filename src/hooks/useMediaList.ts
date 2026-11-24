@@ -21,8 +21,14 @@ function toInput(item: MediaDraft): MediaItemInput {
   };
 }
 
+/** So as fotos: o panorama (plano 019) tem a sua propria secao, "Modo VR". */
 function fromSaved(media: MediaItem[]): MediaDraft[] {
-  return media.map((item) => ({ ...item, kind: 'photo' }));
+  return media.filter((item) => item.kind === 'photo');
+}
+
+/** Itens que nao sao foto, devolvidos intactos para nao apagar o panorama ao salvar. */
+function otherKinds(media: MediaItem[]): MediaItemInput[] {
+  return media.filter((item) => item.kind !== 'photo');
 }
 
 /** Indica que o texto alternativo ainda nao foi escrito pelo administrador. */
@@ -51,7 +57,8 @@ export function useMediaList(point: Point, onSaved: (point: Point) => void) {
   }
 
   async function persist(next: MediaDraft[]) {
-    const saved = await updatePoint(point.id, { media: next.map(toInput) });
+    const media = [...next.map(toInput), ...otherKinds(point.media)];
+    const saved = await updatePoint(point.id, { media });
     setItems(fromSaved(saved.media));
     onSaved(saved);
   }
