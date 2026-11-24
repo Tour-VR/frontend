@@ -1,7 +1,9 @@
+import { Fragment } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { ErrorState } from '../../components/feedback/ErrorState';
 import { LoadingState } from '../../components/feedback/LoadingState';
 import { PointEditor } from '../../components/points/PointEditor';
+import { PointVrSection } from '../../components/points/PointVrSection';
 import { StatusBadge } from '../../components/points/StatusBadge';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { usePoint } from '../../hooks/usePoint';
@@ -36,7 +38,12 @@ export function PointForm() {
         onSaved={setPoint}
         initialNotice={notice}
       />
-      {point ? <MediaSection key={point.id} point={point} onSaved={setPoint} /> : null}
+      {point ? (
+        <Fragment key={point.id}>
+          <MediaSection point={point} onSaved={setPoint} />
+          <PointVrSection point={point} onSaved={setPoint} />
+        </Fragment>
+      ) : null}
     </>
   );
 }
