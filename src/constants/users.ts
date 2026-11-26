@@ -15,6 +15,14 @@ export const ROLE_CHANGE_NOTICE = 'A mudança de papel vale no próximo login da
 
 export const SELF_HINT = 'Você';
 
+export const EDIT_USER_TITLE = 'Editar usuário';
+
+export const USER_UPDATED_MESSAGE = 'Dados do usuário atualizados.';
+
+export const SELF_EMAIL_HINT = 'Se mudar o seu próprio e-mail, você precisará entrar de novo.';
+
+export const OTHER_EMAIL_HINT = 'A pessoa passa a entrar com o novo e-mail.';
+
 export function roleChangeConfirmation(email: string): string {
   return `Alterar o papel de ${email}? A mudança vale no próximo login.`;
 }
