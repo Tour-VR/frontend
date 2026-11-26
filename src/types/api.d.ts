@@ -559,11 +559,22 @@ export interface components {
             created_at: string | null;
         };
         /** UserAdminUpdate */
+        /**
+         * UserAdminUpdate
+         * @description Alteracao feita pelo admin. Campo ausente nao muda; `full_name` e `username`
+         *     aceitam null (ou texto vazio) para limpar o valor.
+         */
         UserAdminUpdate: {
             /** Is Active */
             is_active?: boolean | null;
             /** Role */
             role?: ("admin" | "user") | null;
+            /** Email */
+            email?: string | null;
+            /** Full Name */
+            full_name?: string | null;
+            /** Username */
+            username?: string | null;
         };
         /** UserChangePassword */
         UserChangePassword: {

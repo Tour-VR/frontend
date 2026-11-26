@@ -6,6 +6,7 @@ interface UsersTableProps {
   currentEmail: string | undefined;
   onToggleActive: (user: AdminUser) => void;
   onChangeRole: (user: AdminUser, role: UserRole) => void;
+  onEdit: (user: AdminUser) => void;
 }
 
 const HEADERS = ['Nome', 'E-mail', 'Papel', 'Situação', ''];
@@ -36,6 +37,7 @@ export function UsersTable({ users, currentEmail, ...handlers }: UsersTableProps
               isSelf={user.email === currentEmail}
               onToggleActive={handlers.onToggleActive}
               onChangeRole={handlers.onChangeRole}
+              onEdit={handlers.onEdit}
             />
           ))}
         </tbody>
